@@ -35,6 +35,12 @@ app.config(["$stateProvider","$urlRouterProvider",function($stateProvider,$urlRo
 		controller:"movieCtrl"
 	})
 
+	.state("movie.hotcontent",{
+		url:"/hotcontent",
+		templateUrl:"template/hotcontent.html",
+		controller:"hotcontentCtrl"
+	})
+
 	$urlRouterProvider.when("/","/news")
 }])
 
@@ -149,25 +155,38 @@ app.controller('titanCtrl', ['$scope', function($scope){
 }])
 
 app.controller('movieCtrl', ['$scope',"$http", function($scope,$http){
-	$http.jsonp("php/hotmovie.php",{
+
+}]);
+
+
+
+app.controller("hotcontentCtrl",["$scope","$http",function($scope,$http){
+	  $http.jsonp("php/hotmovie.php",{
 		params:{
 			url:"https://api.douban.com/v2/movie/coming_soon",
 			callback:"JSON_CALLBACK"
 		}
 	}).success(function(data){
-		console.log(data);
+		$scope.datas=data.subjects;
+		console.log(data.subjects);
 	})
-}]);
-
+}])
 app.directive("movienav",function(){
 	return {
 		templateUrl:"compontents/movienav.html"
 	}
 })
-
-app.directive("moviecontent",function(){
+app.directive("moviebanner",function(){
 	var obj = {
-		templateUrl:"compontents/moviecontent.html",
+		templateUrl:"compontents/moviebanner.html",
+		link:function($scope,ele,attr){
+			var point = document.querySelector(".point");
+			console.log(point)
+			
+			angular.element(point).find("a").on("click",function(){
+				console.log(123)
+			})
+		}
 
 
 	}
