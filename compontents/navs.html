@@ -1,3 +1,6 @@
+<header>
+	今日新闻
+</header>
 <nav>
 	<li data='top' class='select'>头条</li>
 	<li data='shehui'>社会</li>
@@ -9,9 +12,16 @@
 	<li data='keji'>科技</li>
 	<li data='caijing'>财经</li>
 	<li data='shishang'>时尚</li>
-	<div ui-view></div>
+
 </nav>
 <style>
+	header{
+		height: 0.44rem;
+		background: #abcdef;
+		line-height: 0.44rem;
+		text-align: center;
+		font-size: 0.3rem;
+	}
 	nav{
 		width: 100%;
 		height: auto;
@@ -25,5 +35,8 @@
 		font-size: 0.14rem;
 		text-align: center;
 	}
-
+	.select{
+		color: red;
+		font-size: 0.2rem;
+	}
 </style>

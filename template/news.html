@@ -1,1 +1,27 @@
 <navs></navs>
+<content></content>
+<img ng-src="images/loading.png" alt="" class="loading" ng-show="loading">
+<div ui-view></div>
+
+<style>
+	.loading{
+		position: absolute;
+		display: block;
+		width: 0.4rem;
+		height: 0.4rem;
+		left: 50%;
+		top:50%;
+		margin-left: -0.2rem;
+		margin-top: -0.2rem;
+		animation: serach 3s infinite linear;
+
+	}
+	@keyframes serach{
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
+	}
+</style>

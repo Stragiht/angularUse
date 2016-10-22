@@ -11,10 +11,10 @@ app.config(["$stateProvider","$urlRouterProvider",function($stateProvider,$urlRo
 		controller:"newsCtrl"
 	})
 	//新闻详情路由
-	.state("news.newcontent",{
-		url:"/newcontent",
-		templateUrl:"template/newcontent.html",
-		controller:"newcontentCtrl"
+	.state("newscontent",{
+		url:"/newscontent/:id/:type",
+		templateUrl:"template/newscontent.html",
+		controller:"newscontentCtrl"
 	})
 	//体坛路由
 	.state("titan",{
@@ -27,6 +27,12 @@ app.config(["$stateProvider","$urlRouterProvider",function($stateProvider,$urlRo
 		url:"/titancontent",
 		templateUrl:"template/titancontent.html",
 		controller:"titancontentCtrl"
+	})
+
+	.state("movie",{
+		url:"/movie",
+		templateUrl:"template/movie.html",
+		controller:"movieCtrl"
 	})
 
 	$urlRouterProvider.when("/","/news")
@@ -49,15 +55,16 @@ app.run(function(){
 
 //新闻控制器
 app.controller('newsCtrl', ['$scope', "$http",function($scope,$http){
+	$scope.loading = true;
 	$http.jsonp("http://localhost/angular_project/php/http.php",{
 		params:{
 			type:"top",
 			callback:"JSON_CALLBACK"
 			}
-			
+
 		}).success(function(data){
-			$scope.data = data.result.data;
-			
+			$scope.datas = data.result.data;
+			$scope.loading = false;
 		})
 }])
 
@@ -65,19 +72,27 @@ app.controller('newsCtrl', ['$scope', "$http",function($scope,$http){
 app.directive("navs",function($http){
 	var obj =  {
 		templateUrl:"compontents/navs.html",
-		link:function(scope,ele,attr){
-			angular.element(document).find("li").on("click",function(){
+			link:function($scope,ele,attr){
+				angular.element(document).find("li").on("click",function(){
+				$scope.loading = true;
+				//导航点击事件
+				angular.element(document).find("li").removeClass("select");
+				 angular.element(document).find("dl").remove();
+				angular.element(this).addClass("select");
 				//console.log(angular.element(this).attr("data"))
-				var type = angular.element(this).attr("data")
+				var type = angular.element(this).attr("data");
+				console.log(type)
+				//请求数据
 				$http.jsonp("http://localhost/angular_project/php/http.php",{
 				params:{
-					type:"top",
+					type:type,
 					callback:"JSON_CALLBACK"
 					}
-					
+
 				}).success(function(data){
-					scope.data = data.result.data;
-					console.log(scope.data)
+					$scope.loading = false;
+					$scope.datas = data.result.data;
+					console.log($scope.datas)
 				})
 
 			})
@@ -86,8 +101,75 @@ app.directive("navs",function($http){
 	return obj;
 })
 
-		
+app.directive("content",function($window,$stateParams){
+	var obj = {
+		templateUrl:"compontents/content.html",
+		link:function($scope,ele,attr){
+			$scope.Click = function(id,type){
+				console.log(id,type);
+				$window.location.href="#/newscontent/"+id+"/"+type;
+			}
+		}
+	}
+
+	return obj
+})
+
+//新闻内容路由
+app.controller('newscontentCtrl', ['$scope','$http','$stateParams',"$sce",function($scope,$http,$stateParams,$sce){
+	// console.log($stateParams.type)
+	var id   = $stateParams.id;
+	var type = $stateParams.type;
+	$http.jsonp("http://localhost/angular_project/php/http.php",{
+		params:{
+			type:type,
+			callback:"JSON_CALLBACK"
+			}
+
+	}).success(function(data){
+		var url = data.result.data[id].url;
+		$http.jsonp("http://localhost/angular_project/php/http1.php",{
+			params:{
+				url:url,
+				callback:"JSON_CALLBACK"
+			}
+		}).success(function(data){
+			$scope.htmlsce = $sce.trustAsHtml(data.match(/<article[^>]*>([\s\S]*?)<\/article>/g)[0]);
+
+		})
+
+	})
+
+}])
+
+
 
 app.controller('titanCtrl', ['$scope', function($scope){
 
 }])
+
+app.controller('movieCtrl', ['$scope',"$http", function($scope,$http){
+	$http.jsonp("php/hotmovie.php",{
+		params:{
+			url:"https://api.douban.com/v2/movie/coming_soon",
+			callback:"JSON_CALLBACK"
+		}
+	}).success(function(data){
+		console.log(data);
+	})
+}]);
+
+app.directive("movienav",function(){
+	return {
+		templateUrl:"compontents/movienav.html"
+	}
+})
+
+app.directive("moviecontent",function(){
+	var obj = {
+		templateUrl:"compontents/moviecontent.html",
+
+
+	}
+	return obj
+})
