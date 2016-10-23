@@ -27,9 +27,12 @@
 			width: 100%;
 			text-align: center;
 			font-size: 0.2rem;
-			color: red;
+			color: #000;
 		}
-
+		.topic .allactive{
+			color:red;
+			font-size: 0.24rem;
+		}
 
 	</style>
 	<script src="js/angular.min.js"></script>
@@ -38,11 +41,24 @@
 <body>
 
 	<ul class="topic">
-		<li><a ng-href="#/news">新闻</a></li>
+		<li><a ng-href="#/news" class="allactive">新闻</a></li>
 		<li><a ng-href="#/titan">体坛</a></li>
 		<li><a ng-href="#/movie/hotcontent">电影</a></li>
 	</ul>
 	<div ui-view></div>
 
 </body>
+	<script>
+		// var arr = document.querySelector(".topic");
+		var arr = document.querySelectorAll(".topic a");
+		for(var i=0; i<arr.length;i++){
+
+			arr[i].onclick=function(){
+				for(var j=0;j<arr.length;j++){
+					arr[j].className="";
+				}
+				this.className="allactive"
+			}
+		}
+	</script>
 </html>

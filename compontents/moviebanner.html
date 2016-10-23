@@ -1,9 +1,12 @@
 <div class="banner">
-	<img ng-src="images/001.jpg" alt="">
-	<img ng-src="images/002.jpg" alt="">
-	<img ng-src="images/003.jpg" alt="">
+	<ul class="list">
+		<img ng-src="images/001.jpg" alt="">
+		<img ng-src="images/002.jpg" alt="">
+		<img ng-src="images/003.jpg" alt="">
+		<img ng-src="images/001.jpg" alt="">
+	</ul>
 	<ul class="point">
-		<a ng-href="javascript:avoid(0)"></a>
+		<a ng-href="javascript:avoid(0)" class="active"></a>
 		<a ng-href="javascript:avoid(0)"></a>
 		<a ng-href="javascript:avoid(0)"></a>
 	</ul>
@@ -17,10 +20,17 @@
 		position: relative;
 
 	}
-	.banner img{
-		width: 100%;
+	.list{
+		height: 1.5rem;
+		position: absolute;
+		left: 0;
+		top:0;
+		transition: all 2s;
+	}
+	.list img{
+		float: left;
+		width: 3.2rem;
 		height: 100%;
-		display: block;
 	}
 	.point{
 		position: absolute;
@@ -38,5 +48,8 @@
 		margin-left: 0.2rem;
 		z-index: 10;
 
+	}
+	.point .active{
+		background: red;
 	}
 </style>

@@ -1,8 +1,8 @@
 <header>豆瓣电影</header>
 <ul class="movie">
-	<li><a ng-href="">影院热映</a></li>
-	<li><a ng-href="">电影推荐</a></li>
-	<li><a ng-href="">查询电影</a></li>
+	<li><a ng-href="#/movie/hotcontent" class="moviestyle">影院热映</a></li>
+	<li><a ng-href="#/movie/recommond">电影推荐</a></li>
+	<li><a ng-href="#/movie/serach">查询电影</a></li>
 </ul>
 
 <style>
@@ -28,6 +28,14 @@
 		text-align: center;
 		color: #000;
 		font-size: 0.16rem;
+
+	}
+	.movie li a{
+		font-size: 0.14rem;
+		color: #000;
+	}
+	.movie .moviestyle{
+		color:red;
 
 	}
 

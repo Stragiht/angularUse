@@ -40,6 +40,21 @@ app.config(["$stateProvider","$urlRouterProvider",function($stateProvider,$urlRo
 		templateUrl:"template/hotcontent.html",
 		controller:"hotcontentCtrl"
 	})
+	.state("movie.recommond",{
+		url:"/recommond",
+		templateUrl:'compontents/moviecontent.html',
+		controller:"moviecontentCtrl"
+	})
+	.state("movie.serach",{
+		url:"/serach",
+		templateUrl:"template/serach.html",
+		controller:"serachCtrl"
+	})
+	.state("movie.detail",{
+		url:"/detail",
+		templateUrl:"template/detail.html",
+		controller:"detailCtrl"
+	})
 
 	$urlRouterProvider.when("/","/news")
 }])
@@ -83,7 +98,7 @@ app.directive("navs",function($http){
 				$scope.loading = true;
 				//导航点击事件
 				angular.element(document).find("li").removeClass("select");
-				 angular.element(document).find("dl").remove();
+				angular.element(document).find("dl").remove();
 				angular.element(this).addClass("select");
 				//console.log(angular.element(this).attr("data"))
 				var type = angular.element(this).attr("data");
@@ -156,11 +171,13 @@ app.controller('titanCtrl', ['$scope', function($scope){
 
 app.controller('movieCtrl', ['$scope',"$http", function($scope,$http){
 
+
 }]);
 
 
 
 app.controller("hotcontentCtrl",["$scope","$http",function($scope,$http){
+	  $scope.loading = true;
 	  $http.jsonp("php/hotmovie.php",{
 		params:{
 			url:"https://api.douban.com/v2/movie/coming_soon",
@@ -168,7 +185,8 @@ app.controller("hotcontentCtrl",["$scope","$http",function($scope,$http){
 		}
 	}).success(function(data){
 		$scope.datas=data.subjects;
-		console.log(data.subjects);
+		$scope.loading = false;
+		// console.log(data.subjects);
 	})
 }])
 app.directive("movienav",function(){
@@ -181,14 +199,119 @@ app.directive("moviebanner",function(){
 		templateUrl:"compontents/moviebanner.html",
 		link:function($scope,ele,attr){
 			var point = document.querySelector(".point");
-			console.log(point)
-			
-			angular.element(point).find("a").on("click",function(){
-				console.log(123)
-			})
-		}
+			var banner = document.querySelector(".banner")
+			var oList = document.querySelector(".list")
+			var arrImg = ele.find("img");
+			var length = arrImg.length;
+			var liWidth = arrImg[0].offsetWidth;
+			console.log(liWidth)
+			oList.style.width= liWidth*length+"px";
+			console.log(oList.offsetWidth);
+			var time = setInterval(move,2000);
+			var arrBtn = ele.find("ul").eq(1).find("a");
 
+			var i= 0;
+			function move(){
+				var obj = ele.find("ul").eq(0)
+				i++;
+				if(i>3){
+					obj.css({"transition":"none","left":0});
+					i=0;
+					// obj.css("left",0)
+
+				}else{
+					obj.css("left",-liWidth*i+"px");
+					obj.css("transition","all 1s");
+
+				}
+				for(var j=0;j<arrBtn.length;j++){
+
+					if (i==j){
+						angular.element(arrBtn[j]).addClass("active");
+					}else{
+						angular.element(arrBtn[j]).removeClass("active");
+					}
+				}
+
+
+			}
+			for (var j=0;j<arrBtn.length;j++){
+				arrBtn[j].xxx=j;
+				arrBtn[j].onclick=function(){
+					console.log(this.xxx);
+					i=this.xxx -1;
+					btnMove();
+				}
+			}
+
+			function btnMove(){
+				clearInterval(time);
+				move();
+				time =setInterval(move,2000)
+			}
+		}
 
 	}
 	return obj
 })
+
+app.directive("moviecontent",function(){
+	var obj = {
+		templateUrl:"compontents/moviecontent.html",
+	}
+
+	return obj
+})
+
+app.controller('moviecontentCtrl', ['$scope',"$http", function($scope,$http){
+	 $scope.loading = true;
+	 $http.jsonp("php/hotmovie.php",{
+		params:{
+			url:"https://api.douban.com/v2/movie/top250",
+			callback:"JSON_CALLBACK"
+		}
+	}).success(function(data){
+		$scope.datas=data.subjects;
+		$scope.loading = false;
+		console.log(data.subjects);
+	})
+}])
+
+app.controller('serachCtrl', ['$scope',"$http", function($scope,$http){
+
+	 $scope.content = "",
+	 $scope.serach = function(){
+	 	if(!$scope.content){
+	 		alert("请输入你要搜索的内容！")
+	 		return
+	 	}
+	 	$scope.loading = true;
+		 $http.jsonp("php/hotmovie.php",{
+			params:{
+				url:"https://api.douban.com/v2/movie/search?q="+$scope.content,
+				callback:"JSON_CALLBACK"
+			}
+		}).success(function(data){
+			$scope.datas=data.subjects;
+			$scope.loading = false;
+			//console.log(data.subjects);
+		})
+	 }
+}])
+//加载时出现的标志
+app.directive("load",function(){
+	var obj ={
+		templateUrl:"compontents/loading.html"
+	}
+
+	return obj
+})
+
+app.service('detail', [function($window){
+	return{
+		detail:function(id){
+			$window.location.href = "#/detail/"+id;
+		}
+	}
+}])
+//  url:"https://api.douban.com/v2/movie/subject/"+movieId,

@@ -1,0 +1,57 @@
+<div class="movieContent">
+	<dl ng-repeat= "data in datas">
+		<dt><img ng-src="{{data.images.large}}"></dt>
+		<dd>
+			<h2>{{data.title}}</h2>
+			<p>类型:<span ng-repeat = "objs in data.genres track by $index"> {{objs}}</span></p>
+			<p>年份:&nbsp;{{data.year}}</p>
+			<p>演员列表:<span ng-repeat = "obj in data.casts">{{obj.name}}</span></p>
+		</dd>
+	</dl>
+
+</div>
+<load></load>
+<style type="text/css">
+	.movieContent{
+		padding: 0.1rem;
+		box-sizing: border-box;
+		width: 100%;
+		height: 1.5rem;
+	}
+	.movieContent dl{
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+	.movieContent  dt{
+		width: 1rem;
+		height: 1rem;
+		float: left;
+
+	}
+	.movieContent dt img{
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+	.movieContent dd{
+		width: 1.9rem;
+		float: right;
+		height: 100%;
+	}
+	.movieContent dd h2{
+		width: 1.9rem;
+		height: 0.3rem;
+		line-height: 0.3rem;
+		/*text-align: center;*/
+		font-size: 0.14rem;
+	}
+	.movieContent dd p{
+		height: 0.2rem;
+		line-height: 0.2rem;
+
+	}
+	.movieContent dd p span{
+		padding-left: 0.05rem;
+	}
+</style>
