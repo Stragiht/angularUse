@@ -42,7 +42,7 @@ app.config(["$stateProvider","$urlRouterProvider",function($stateProvider,$urlRo
 	})
 	.state("movie.recommond",{
 		url:"/recommond",
-		templateUrl:'compontents/moviecontent.html',
+		templateUrl:'template/recommond.html',
 		controller:"moviecontentCtrl"
 	})
 	.state("movie.serach",{
@@ -50,8 +50,8 @@ app.config(["$stateProvider","$urlRouterProvider",function($stateProvider,$urlRo
 		templateUrl:"template/serach.html",
 		controller:"serachCtrl"
 	})
-	.state("movie.detail",{
-		url:"/detail",
+	.state("detail",{
+		url:"/detail/:id",
 		templateUrl:"template/detail.html",
 		controller:"detailCtrl"
 	})
@@ -94,7 +94,7 @@ app.directive("navs",function($http){
 	var obj =  {
 		templateUrl:"compontents/navs.html",
 			link:function($scope,ele,attr){
-				angular.element(document).find("li").on("click",function(){
+				ele.find("li").on("click",function(){
 				$scope.loading = true;
 				//导航点击事件
 				angular.element(document).find("li").removeClass("select");
@@ -255,9 +255,16 @@ app.directive("moviebanner",function(){
 	return obj
 })
 
-app.directive("moviecontent",function(){
+app.directive("moviecontent",function($window){
 	var obj = {
 		templateUrl:"compontents/moviecontent.html",
+		link:function($scope,ele,attr){
+			
+			$scope.detail = function(id){
+				$window.location.href="#/detail/"+id;
+			}
+			
+		}
 	}
 
 	return obj
@@ -306,12 +313,35 @@ app.directive("load",function(){
 
 	return obj
 })
-
-app.service('detail', [function($window){
+/*app.service("ask",function($http){
 	return{
-		detail:function(id){
-			$window.location.href = "#/detail/"+id;
+		data:function(url){
+			 $http.jsonp("php/hotmovie.php",{
+			 params:{
+					url:url,
+					callback:"JSON_CALLBACK"
+				}
+			}).success(function(data){
+				$scope.datas=data.subjects;
+				$scope.loading = false;
+				//console.log(data.subjects);
+			})
 		}
 	}
+})*/
+
+app.controller("detailCtrl",["$scope","$stateParams","$http",function($scope,$stateParams,$http){
+	var id = $stateParams.id;
+	 $http.jsonp("php/hotmovie.php",{
+			params:{
+				url:"https://api.douban.com/v2/movie/subject/"+id,
+				callback:"JSON_CALLBACK"
+			}
+		}).success(function(data){
+			console.log(data);
+			$scope.data =data;
+		})
+	
 }])
+
 //  url:"https://api.douban.com/v2/movie/subject/"+movieId,

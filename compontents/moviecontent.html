@@ -1,5 +1,5 @@
 <div class="movieContent">
-	<dl ng-repeat= "data in datas">
+	<dl ng-repeat= "data in datas" ng-click="detail(data.id)">
 		<dt><img ng-src="{{data.images.large}}"></dt>
 		<dd>
 			<h2>{{data.title}}</h2>
