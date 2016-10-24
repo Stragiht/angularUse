@@ -1,0 +1,36 @@
+<div class="watch">节目列表</div>
+<ul class="watchtitle">
+	<li ng-repeat="data in datas" ng-click="choose($event,data.id)" class="watch-{{$first}}">{{data.name}}</li>
+</ul>
+
+
+<style>
+	.watch{
+		height: 0.44rem;
+		width: 100%;
+		line-height: 0.44rem;
+		text-align: center;
+		font-size: 0.3rem;
+		background: #abcdef;
+
+	}
+	.watchtitle{
+		overflow: hidden;
+	}
+
+	.watchtitle li{
+		width: 33.3%;
+		line-height: 0.36rem;
+		text-align: center;
+		float: left;
+		font-size: 0.16rem;
+		background: #ccc;
+
+
+	}
+	.watchtitle .watch-true{
+		background: red;
+		font-size: 0.16rem;
+		color: #fff;
+	}
+</style>

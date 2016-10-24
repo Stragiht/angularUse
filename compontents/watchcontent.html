@@ -1,0 +1,18 @@
+<ul class="tvcontent">
+	<li ng-repeat="data in dataset" ng-click="watchdetail(data.rel)">{{$index+1}}:&nbsp;{{data.channelName}}</li>
+</ul>
+
+<style>
+	.tvcontent{
+		width: 100%;
+	}
+	.tvcontent li{
+		height: 0.32rem;
+		line-height: 0.32rem;
+		font-size: 0.14rem;
+		padding-left:0.3rem;
+		color: #333;
+		font-style: bolder;
+	}
+
+</style>

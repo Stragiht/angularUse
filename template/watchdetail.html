@@ -1,0 +1,45 @@
+<header>详情列表</header>
+<ul class="detail">
+	<li ng-repeat="data in dataset">
+		<a ng-href="{{data.pUrl}}">
+			<h2>{{$index+1}}:{{data.pName}}</h2>
+			<p><span>{{data.cName}}</span><span>{{data.time}}</span></p>
+
+		</a>
+	</li>
+</ul>
+<style>
+	header{
+		height: 0.44rem;
+		width: 100%;
+		text-align: center;
+		line-height: 0.44rem;
+		font-size: 0.24rem;
+		background: #3A3A3A;
+		color: #fff;
+	}
+	.detail{
+		width: 100%;
+		padding-bottom: 0.5rem;
+
+	}
+	.detail li{
+		width: 100%;
+
+	}
+	.detail li a{
+		color: #333;
+	}
+	.detail h2{
+		line-height: 0.4rem;
+		font-size: 0.16rem;
+		padding-left: 0.2rem;
+
+	}
+	.detail p{
+		padding-left:0.2rem;
+		height: 0.2rem;
+		line-height: 0.2rem;
+		color: blue;
+	}
+</style>
