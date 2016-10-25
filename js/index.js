@@ -98,9 +98,9 @@ app.directive("navs",function($http){
 				ele.find("li").on("click",function(){
 				$scope.loading = true;
 				//导航点击事件
-				angular.element(ele).find("li").removeClass("select");
-				console.log(angular.element(ele).find("li"))
-				angular.element(ele).find("dl").remove();
+				ele.find("li").removeClass("select");
+				console.log(angular.element(ele).find("dl"));
+				angular.element(document).find("dl").remove();
 				angular.element(this).addClass("select");
 				//console.log(angular.element(this).attr("data"))
 				var type = angular.element(this).attr("data");
@@ -146,7 +146,8 @@ app.controller('newscontentCtrl', ['$scope','$http','$stateParams',"$sce",functi
 	var id   = $stateParams.id;
 	var type = $stateParams.type;
 	//新闻详情 先请求到数据 ，再请求到url里面的内容 最后渲染到页面上
-	$http.jsonp("php/http.php",{
+	//php/http.php
+	$http.jsonp("http://1.kiven666.applinzi.com/php/http.php",{
 		params:{
 			type:type,
 			callback:"JSON_CALLBACK"
@@ -154,7 +155,8 @@ app.controller('newscontentCtrl', ['$scope','$http','$stateParams',"$sce",functi
 
 	}).success(function(data){
 		var url = data.result.data[id].url;
-		$http.jsonp("php/http1.php",{
+		//php/http1.php
+		$http.jsonp("http://1.kiven666.applinzi.com/php/http1.php",{
 			params:{
 				url:url,
 				callback:"JSON_CALLBACK"
@@ -173,7 +175,8 @@ app.controller('newscontentCtrl', ['$scope','$http','$stateParams',"$sce",functi
 app.controller('watchCtrl', ['$scope','$http', function($scope,$http){
 	//默认让 央视 以及央视的节目列表显示在页面上
 	//请求电视类型
-	$http.jsonp("php/tv.php",{
+	//php/tv.php
+	$http.jsonp("http://1.kiven666.applinzi.com/php/tv.php",{
 		params:{
 			callback:"JSON_CALLBACK"
 		}
@@ -181,7 +184,8 @@ app.controller('watchCtrl', ['$scope','$http', function($scope,$http){
 		$scope.datas = data.result;
 		console.log($scope.datas)
 		//请求电视类型里面的 详情列表
-		$http.jsonp("php/tvcontent.php",{
+		//php/tvcontent.php
+		$http.jsonp("http://1.kiven666.applinzi.com/php/tvcontent.php",{
 				params:{
 					id:1,
 					callback:"JSON_CALLBACK"
@@ -199,7 +203,7 @@ app.controller('watchCtrl', ['$scope','$http', function($scope,$http){
 app.controller('watchdetailCtrl', ['$scope','$stateParams','$http', function($scope,$stateParams,$http){
 	var type = $stateParams.type;
 	//请求数据
-	$http.jsonp("php/watchdetail.php",{
+	$http.jsonp("http://1.kiven666.applinzi.com/php/watchdetail.php",{
 		params:{
 			id:type,
 			callback:"JSON_CALLBACK"
@@ -228,7 +232,8 @@ app.directive("watchnav",function($http){
 				// this.className = "watch-true"
 				var index=id;
 				scope.loading = true;
-				$http.jsonp("php/tvcontent.php",{
+				//php/tvcontent.php
+				$http.jsonp("http://1.kiven666.applinzi.com/php/tvcontent.php",{
 					params:{
 						id:index,
 						callback:"JSON_CALLBACK"
@@ -271,7 +276,8 @@ app.controller('movieCtrl', ['$scope',"$http", function($scope,$http){
 //电影热映控制器
 app.controller("hotcontentCtrl",["$scope","$http",function($scope,$http){
 	  $scope.loading = true;
-	  $http.jsonp("php/hotmovie.php",{
+	 //php/hotmovie.php
+	  $http.jsonp("http://1.kiven666.applinzi.com/php/hotmovie.php",{
 		params:{
 			url:"https://api.douban.com/v2/movie/coming_soon",
 			callback:"JSON_CALLBACK"
@@ -289,9 +295,11 @@ app.directive("movienav",function(){
 		templateUrl:"compontents/movienav.html",
 		link:function(scope,ele,attr){
 			ele.find("li").on("click",function($event){
-				console.log(ele.find("li"))
-				ele.find("li").removeClass("moviestyle");
-
+				console.log(ele.find("li").eq(0))
+				console.log(angular.element(ele));
+				//ele.find("li").eq(0).removeClass("moviestyle");
+				ele.find("a").removeClass("moviestyle");
+				//angular.element(ele).css("color","blue");
 				angular.element($event.target).addClass("moviestyle")
 			})
 		}
@@ -381,7 +389,8 @@ app.directive("moviecontent",function($window){
 //电影内容控制器
 app.controller('moviecontentCtrl', ['$scope',"$http", function($scope,$http){
 	 $scope.loading = true;
-	 $http.jsonp("php/hotmovie.php",{
+	 //php/hotmovie.php
+	 $http.jsonp("http://1.kiven666.applinzi.com/php/hotmovie.php",{
 		params:{
 			url:"https://api.douban.com/v2/movie/top250",
 			callback:"JSON_CALLBACK"
@@ -402,8 +411,9 @@ app.controller('serachCtrl', ['$scope',"$http", function($scope,$http){
 	 		alert("请输入你要搜索的内容！")
 	 		return
 	 	}
+	 	//php/hotmovie.php
 	 	$scope.loading = true;
-		 $http.jsonp("php/hotmovie.php",{
+		 $http.jsonp("http://1.kiven666.applinzi.com/php/hotmovie.php",{
 			params:{
 				url:"https://api.douban.com/v2/movie/search?q="+$scope.content,
 				callback:"JSON_CALLBACK"
@@ -427,7 +437,8 @@ app.directive("load",function(){
 //详情控制器
 app.controller("detailCtrl",["$scope","$stateParams","$http",function($scope,$stateParams,$http){
 	var id = $stateParams.id;
-	 $http.jsonp("php/hotmovie.php",{
+	//php/hotmovie.php
+	 $http.jsonp("http://1.kiven666.applinzi.com/php/hotmovie.php",{
 			params:{
 				url:"https://api.douban.com/v2/movie/subject/"+id,
 				callback:"JSON_CALLBACK"
